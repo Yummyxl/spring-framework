@@ -19,32 +19,32 @@ package org.springframework.beans.factory;
 import org.springframework.lang.Nullable;
 
 /**
- * Interface to be implemented by objects used within a {@link BeanFactory} which
- * are themselves factories for individual objects. If a bean implements this
- * interface, it is used as a factory for an object to expose, not directly as a
- * bean instance that will be exposed itself.
+ * Interface to be implemented by objects used within a {@link BeanFactory} which  实现了这个接口的对象在BeanFactory中使用，
+ * are themselves factories for individual objects. If a bean implements this      这些对象本身就是单个对象的工厂。如果一个Bean实现了
+ * interface, it is used as a factory for an object to expose, not directly as a   这个接口，这个bean就会被用于工厂去暴露对象，而不是直接
+ * bean instance that will be exposed itself.          作为一个实例去暴露自己
  *
- * <p><b>NB: A bean that implements this interface cannot be used as a normal bean.</b>
- * A FactoryBean is defined in a bean style, but the object exposed for bean
- * references ({@link #getObject()}) is always the object that it creates.
+ * <p><b>NB: A bean that implements this interface cannot be used as a normal bean.</b>  实现了这个接口的bean不能作为一个普通的bean。
+ * A FactoryBean is defined in a bean style, but the object exposed for bean    一个FactoryBean按照bean风格被定义，但是bean的getObject()暴露出来的对象
+ * references ({@link #getObject()}) is always the object that it creates.      总是这个bean创建出来的对象。
  *
- * <p>FactoryBeans can support singletons and prototypes, and can either create
- * objects lazily on demand or eagerly on startup. The {@link SmartFactoryBean}
+ * <p>FactoryBeans can support singletons and prototypes, and can either create   FactoryBeans支持singletons和prototypes，可以
+ * objects lazily on demand or eagerly on startup. The {@link SmartFactoryBean}   根据需要在需要时候延迟创建对象也可以在启动时候饥饿的创建对象。
  * interface allows for exposing more fine-grained behavioral metadata.
  *
- * <p>This interface is heavily used within the framework itself, for example for
- * the AOP {@link org.springframework.aop.framework.ProxyFactoryBean} or the
+ * <p>This interface is heavily used within the framework itself, for example for  这个接口被spring框架大量使用，比如说aop（代理）
+ * the AOP {@link org.springframework.aop.framework.ProxyFactoryBean} or the   比如ProxyFactoryBean或者JndiObjectFactoryBean
  * {@link org.springframework.jndi.JndiObjectFactoryBean}. It can be used for
  * custom components as well; however, this is only common for infrastructure code.
  *
- * <p><b>{@code FactoryBean} is a programmatic contract. Implementations are not
- * supposed to rely on annotation-driven injection or other reflective facilities.</b>
- * {@link #getObjectType()} {@link #getObject()} invocations may arrive early in
- * the bootstrap process, even ahead of any post-processor setup. If you need access
- * other beans, implement {@link BeanFactoryAware} and obtain them programmatically.
+ * <p><b>{@code FactoryBean} is a programmatic contract. Implementations are not    FactoryBean是一个程序性协议。
+ * supposed to rely on annotation-driven injection or other reflective facilities.</b>  实现不应该依靠注解驱动注入或者反射。
+ * {@link #getObjectType()} {@link #getObject()} invocations may arrive early in    getObjectType()和getObject()调用可能在启动处理之前，
+ * the bootstrap process, even ahead of any post-processor setup. If you need access   甚至在 后置处理器 启动之前。
+ * other beans, implement {@link BeanFactoryAware} and obtain them programmatically.  如果需要访问其他的bean，实现BeanFactoryAware并且实现
  *
- * <p>Finally, FactoryBean objects participate in the containing BeanFactory's
- * synchronization of bean creation. There is usually no need for internal
+ * <p>Finally, FactoryBean objects participate in the containing BeanFactory's   FactoryBean对象参与到包含BeanFactory中bean创建的同步。
+ * synchronization of bean creation. There is usually no need for internal     通常没必要内部同步除了FactoryBean中的延迟加载。
  * synchronization other than for purposes of lazy initialization within the
  * FactoryBean itself (or the like).
  *

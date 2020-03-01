@@ -21,50 +21,50 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
- * The root interface for accessing a Spring bean container.
- * This is the basic client view of a bean container;
- * further interfaces such as {@link ListableBeanFactory} and
- * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}
- * are available for specific purposes.
+ * The root interface for accessing a Spring bean container.  访问spring容器根接口 // 意思定义了一个契约，所有都得符合这个接口定义
+ * This is the basic client view of a bean container;   这是一个bean容器客户端基本视图
+ * further interfaces such as {@link ListableBeanFactory} and  像ListableBeanFactory 和
+ * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}  ConfigurableBeanFactory 这些进一步的接口
+ * are available for specific purposes.   这些进一步的接口是对于BeanFactory的具化，用于一些指定的目标
  *
- * <p>This interface is implemented by objects that hold a number of bean definitions,
- * each uniquely identified by a String name. Depending on the bean definition,
- * the factory will return either an independent instance of a contained object
- * (the Prototype design pattern), or a single shared instance (a superior
- * alternative to the Singleton design pattern, in which the instance is a
- * singleton in the scope of the factory). Which type of instance will be returned
- * depends on the bean factory configuration: the API is the same. Since Spring
- * 2.0, further scopes are available depending on the concrete application
- * context (e.g. "request" and "session" scopes in a web environment).
+ * <p>This interface is implemented by objects that hold a number of bean definitions,   这个接口被一些对象实现，这些对象持有大量的bean定义
+ * each uniquely identified by a String name. Depending on the bean definition,    每一个对象被字符串唯一标示。根据bean定义，
+ * the factory will return either an independent instance of a contained object    每一个factory返回一个要么 所包含对象的独立的实例，原型设计模式
+ * (the Prototype design pattern), or a single shared instance (a superior         或者返回一个单独共享的实例
+ * alternative to the Singleton design pattern, in which the instance is a         单例模式的一个改变，这种情况下这个实例在工厂中是单例的 （这里说的是scope）
+ * singleton in the scope of the factory). Which type of instance will be returned 到底哪一种实例被返回
+ * depends on the bean factory configuration: the API is the same. Since Spring    取决于bean工厂的配置：API是一样的
+ * 2.0, further scopes are available depending on the concrete application   从spring2.0开始，提供了更多的范围，取决于影响上下文
+ * context (e.g. "request" and "session" scopes in a web environment).     比如web环境中的request和session
  *
- * <p>The point of this approach is that the BeanFactory is a central registry
- * of application components, and centralizes configuration of application
- * components (no more do individual objects need to read properties files,
+ * <p>The point of this approach is that the BeanFactory is a central registry  这种方式的要点是BeanFactory是一个中央的注册器对于
+ * of application components, and centralizes configuration of application 应用容器，并且中央式管理应用容器的配置
+ * components (no more do individual objects need to read properties files, 每个对象不再需要读取自己的配置文件
  * for example). See chapters 4 and 11 of "Expert One-on-One J2EE Design and
- * Development" for a discussion of the benefits of this approach.
+ * Development" for a discussion of the benefits of this approach.   看chapters 4 and 11 of "Expert One-on-One J2EE Design an Development" 看一下这种方式的好处
  *
- * <p>Note that it is generally better to rely on Dependency Injection
- * ("push" configuration) to configure application objects through setters
- * or constructors, rather than use any form of "pull" configuration like a
- * BeanFactory lookup. Spring's Dependency Injection functionality is
+ * <p>Note that it is generally better to rely on Dependency Injection  通常更好去依赖 依赖注入
+ * ("push" configuration) to configure application objects through setters （推 配置）通过setters或者构造方法 去配置应用对象
+ * or constructors, rather than use any form of "pull" configuration like a  而不是采用拉的方式比如BeanFactory的寻找lookup
+ * BeanFactory lookup. Spring's Dependency Injection functionality is      spring的依赖注入功能通过BeanFactory接口和他的自接口来实现
  * implemented using this BeanFactory interface and its subinterfaces.
  *
- * <p>Normally a BeanFactory will load bean definitions stored in a configuration
- * source (such as an XML document), and use the {@code org.springframework.beans}
- * package to configure the beans. However, an implementation could simply return
+ * <p>Normally a BeanFactory will load bean definitions stored in a configuration    通常一个BeanFactory会加载bean存储在配置源（比如xml文档）中的定义
+ * source (such as an XML document), and use the {@code org.springframework.beans}   然后使用org.springframework.beans包来配置bean
+ * package to configure the beans. However, an implementation could simply return    但是，一个实现可以在java代码中简单返回根据它的需要直接创建的java对象
  * Java objects it creates as necessary directly in Java code. There are no
- * constraints on how the definitions could be stored: LDAP, RDBMS, XML,
- * properties file, etc. Implementations are encouraged to support references
- * amongst beans (Dependency Injection).
+ * constraints on how the definitions could be stored: LDAP, RDBMS, XML,       在definitions怎样被存储上并没有什么限制：比如 LDAP RDBMS XML
+ * properties file, etc. Implementations are encouraged to support references  properties文件。  鼓励去实现支持 bean 之间的引用关系
+ * amongst beans (Dependency Injection). 依赖注入
  *
- * <p>In contrast to the methods in {@link ListableBeanFactory}, all of the
- * operations in this interface will also check parent factories if this is a
- * {@link HierarchicalBeanFactory}. If a bean is not found in this factory instance,
- * the immediate parent factory will be asked. Beans in this factory instance
- * are supposed to override beans of the same name in any parent factory.
+ * <p>In contrast to the methods in {@link ListableBeanFactory}, all of the    对比 ListableBeanFactory 中的方法，
+ * operations in this interface will also check parent factories if this is a  这个接口的所有实现会检查父工厂如果这是一个HierarchicalBeanFactory
+ * {@link HierarchicalBeanFactory}. If a bean is not found in this factory instance,  如果在工厂实例中未找到一个bean，
+ * the immediate parent factory will be asked. Beans in this factory instance   将会调用直接父类来寻找。   在工厂实例中的bean
+ * are supposed to override beans of the same name in any parent factory.      支持去重写父类工厂中相同方法的bean
  *
- * <p>Bean factory implementations should support the standard bean lifecycle interfaces
- * as far as possible. The full set of initialization methods and their standard order is:
+ * <p>Bean factory implementations should support the standard bean lifecycle interfaces  Bean factory的实现应当支持标准bean生命周期接口
+ * as far as possible. The full set of initialization methods and their standard order is:   完整的初始化方法和顺序
  * <ol>
  * <li>BeanNameAware's {@code setBeanName}
  * <li>BeanClassLoaderAware's {@code setBeanClassLoader}
@@ -87,7 +87,7 @@ import org.springframework.lang.Nullable;
  * <li>{@code postProcessAfterInitialization} methods of BeanPostProcessors
  * </ol>
  *
- * <p>On shutdown of a bean factory, the following lifecycle methods apply:
+ * <p>On shutdown of a bean factory, the following lifecycle methods apply:   bean 工厂销毁的生命周期
  * <ol>
  * <li>{@code postProcessBeforeDestruction} methods of DestructionAwareBeanPostProcessors
  * <li>DisposableBean's {@code destroy}
@@ -116,10 +116,10 @@ import org.springframework.lang.Nullable;
 public interface BeanFactory {
 
 	/**
-	 * Used to dereference a {@link FactoryBean} instance and distinguish it from
-	 * beans <i>created</i> by the FactoryBean. For example, if the bean named
-	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}
-	 * will return the factory, not the instance returned by the factory.
+	 * Used to dereference a {@link FactoryBean} instance and distinguish it from  用于解引用一个FactoryBean实例并且区分FactoryBean创建的bean和FactoryBean的实例
+	 * beans <i>created</i> by the FactoryBean. For example, if the bean named     例如，如果一个
+	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}         名字为 myJndiObject 是一个FactoryBean， 获取 &myJndiObject
+	 * will return the factory, not the instance returned by the factory.           会返回一个工厂，并不是这个工厂返回的实例  意思就是加上&返回FactoryBean本身，不加返回FactoryBean创建的增强过的bean
 	 */
 	String FACTORY_BEAN_PREFIX = "&";
 
