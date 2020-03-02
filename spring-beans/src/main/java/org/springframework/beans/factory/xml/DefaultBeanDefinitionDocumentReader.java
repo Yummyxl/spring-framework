@@ -40,11 +40,11 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Default implementation of the {@link BeanDefinitionDocumentReader} interface that
- * reads bean definitions according to the "spring-beans" DTD and XSD format
+ * Default implementation of the {@link BeanDefinitionDocumentReader} interface that    BeanDefinitionDocumentReader接口的默认实现，
+ * reads bean definitions according to the "spring-beans" DTD and XSD format            通过spring-beans DTD和spring默认的xml bean定义来读取bean定义
  * (Spring's default XML bean definition format).
  *
- * <p>The structure, elements, and attribute names of the required XML document
+ * <p>The structure, elements, and attribute names of the required XML document   所需xml文档的结构 元素 属性名都是在class中硬编码。
  * are hard-coded in this class. (Of course a transform could be run if necessary
  * to produce this format). {@code <beans>} does not need to be the root
  * element of the XML document: this class will parse all bean definition elements
@@ -85,10 +85,10 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 
 	/**
-	 * This implementation parses bean definitions according to the "spring-beans" XSD
+	 * This implementation parses bean definitions according to the "spring-beans" XSD  这个实现通过spring-beans的XSD来解析bean定义
 	 * (or DTD, historically).
-	 * <p>Opens a DOM Document; then initializes the default settings
-	 * specified at the {@code <beans/>} level; then parses the contained bean definitions.
+	 * <p>Opens a DOM Document; then initializes the default settings    打开DOM文档，然后初始化bean层次上的默认设置，
+	 * specified at the {@code <beans/>} level; then parses the contained bean definitions.    然后解析包含的bean定义
 	 */
 	@Override
 	public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext) {
@@ -115,18 +115,19 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 
 	/**
-	 * Register each bean definition within the given root {@code <beans/>} element.
+	 * Register each bean definition within the given root {@code <beans/>} element.   通过给定的根元素（ <beans/>）注册每一个bean定义
+	 *
 	 */
 	@SuppressWarnings("deprecation")  // for Environment.acceptsProfiles(String...)
 	protected void doRegisterBeanDefinitions(Element root) {
-		// Any nested <beans> elements will cause recursion in this method. In
-		// order to propagate and preserve <beans> default-* attributes correctly,
-		// keep track of the current (parent) delegate, which may be null. Create
-		// the new (child) delegate with a reference to the parent for fallback purposes,
-		// then ultimately reset this.delegate back to its original (parent) reference.
-		// this behavior emulates a stack of delegates without actually necessitating one.
+		// Any nested <beans> elements will cause recursion in this method. In   任何嵌套的 beans 元素在这个方法会导致递归。 （文件引入的方式）
+		// order to propagate and preserve <beans> default-* attributes correctly,   为了正确的传播和维持 beans 的 default-* 属性，
+		// keep track of the current (parent) delegate, which may be null. Create   会记录当前（父亲）代理，可能为null。
+		// the new (child) delegate with a reference to the parent for fallback purposes,   创建一个新的（子）委托携带着对父亲委托的引用用于回滚的目的，
+		// then ultimately reset this.delegate back to its original (parent) reference.   然后最终重置 this.delegate 到原来（parent）的引用。
+		// this behavior emulates a stack of delegates without actually necessitating one.   这种方式模拟了栈的功能，没有一个实际的必要。
 		BeanDefinitionParserDelegate parent = this.delegate;
-		this.delegate = createDelegate(getReaderContext(), root, parent);
+		this.delegate = createDelegate(getReaderContext(), root, parent);  // this.delegate已经由默认值了
 
 		if (this.delegate.isDefaultNamespace(root)) {
 			String profileSpec = root.getAttribute(PROFILE_ATTRIBUTE);
@@ -145,7 +146,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 
-		preProcessXml(root);
+		preProcessXml(root);  // 这里三个方法用到了模版方法模式
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 
@@ -156,7 +157,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			XmlReaderContext readerContext, Element root, @Nullable BeanDefinitionParserDelegate parentDelegate) {
 
 		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);
-		delegate.initDefaults(root, parentDelegate);
+		delegate.initDefaults(root, parentDelegate);  // 装配默认值
 		return delegate;
 	}
 
@@ -198,7 +199,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
-			doRegisterBeanDefinitions(ele);
+			doRegisterBeanDefinitions(ele); // 遇到 <beans> 标签 递归处理
 		}
 	}
 

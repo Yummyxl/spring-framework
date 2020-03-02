@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.xml.DomUtils;
 
 /**
- * Stateful delegate class used to parse XML bean definitions.
+ * Stateful delegate class used to parse XML bean definitions.   用于解析xml bean定义的有状态委托类
  * Intended for use by both the main parser and any extension
  * {@link BeanDefinitionParser BeanDefinitionParsers} or
  * {@link BeanDefinitionDecorator BeanDefinitionDecorators}.
@@ -299,7 +299,7 @@ public class BeanDefinitionParserDelegate {
 	/**
 	 * Initialize the default lazy-init, autowire, dependency check settings,
 	 * init-method, destroy-method and merge settings. Support nested 'beans'
-	 * element use cases by falling back to the given parent in case the
+	 * element use cases by falling back to the given parent in case the    通过返回给给定的parent来支持嵌套的beans元素，如果没有在本地设置默认值
 	 * defaults are not explicitly set locally.
 	 * @see #populateDefaults(DocumentDefaultsDefinition, DocumentDefaultsDefinition, org.w3c.dom.Element)
 	 * @see #getDefaults()
