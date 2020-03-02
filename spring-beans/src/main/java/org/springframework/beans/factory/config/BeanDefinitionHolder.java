@@ -23,11 +23,11 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-/**
- * Holder for a BeanDefinition with name and aliases.
- * Can be registered as a placeholder for an inner bean.
+/** 实际上包装了BeanDefinition对象
+ * Holder for a BeanDefinition with name and aliases.    BeanDefinition的持有者携带名字和别名。
+ * Can be registered as a placeholder for an inner bean.   可以被注册作为一个内部bean的占位符。
  *
- * <p>Can also be used for programmatic registration of inner bean
+ * <p>Can also be used for programmatic registration of inner bean   还可以用于一编程式的注册来注册内部bean的定义。
  * definitions. If you don't care about BeanNameAware and the like,
  * registering RootBeanDefinition or ChildBeanDefinition is good enough.
  *
