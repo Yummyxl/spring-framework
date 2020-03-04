@@ -18,7 +18,7 @@ package org.springframework.beans.factory;
 
 import org.springframework.beans.BeansException;
 
-/**
+/** 类似于FactoryBean，主要是作为api来用，直接返回一个对象
  * Defines a factory which can return an Object instance
  * (possibly shared or independent) when invoked.
  *
