@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
  * Interface to provide configuration for a web application. This is read-only while
  * the application is running, but may be reloaded if the implementation supports this.
  *
- * <p>This interface adds a {@code getServletContext()} method to the generic
+ * <p>This interface adds a {@code getServletContext()} method to the generic    这个接口增加了 getServletContext() 方法。
  * ApplicationContext interface, and defines a well-known application attribute name
  * that the root context must be bound to in the bootstrap process.
  *

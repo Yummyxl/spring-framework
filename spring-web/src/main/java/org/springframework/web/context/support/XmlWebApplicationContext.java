@@ -24,25 +24,25 @@ import org.springframework.beans.factory.xml.ResourceEntityResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 /**
- * {@link org.springframework.web.context.WebApplicationContext} implementation
- * which takes its configuration from XML documents, understood by an
- * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
+ * {@link org.springframework.web.context.WebApplicationContext} implementation  WebApplicationContext的一个实现，
+ * which takes its configuration from XML documents, understood by an    会从xml文档中加载配置，
+ * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.  加载的配置被XmlBeanDefinitionReader理解。
  * This is essentially the equivalent of
- * {@link org.springframework.context.support.GenericXmlApplicationContext}
+ * {@link org.springframework.context.support.GenericXmlApplicationContext}  对于web环境来说这个类等价于GenericXmlApplicationContext。
  * for a web environment.
  *
- * <p>By default, the configuration will be taken from "/WEB-INF/applicationContext.xml"
+ * <p>By default, the configuration will be taken from "/WEB-INF/applicationContext.xml"  默认配置来自 /WEB-INF/applicationContext.xml对于根上下文，
  * for the root context, and "/WEB-INF/test-servlet.xml" for a context with the namespace
  * "test-servlet" (like for a DispatcherServlet instance with the servlet-name "test").
  *
- * <p>The config location defaults can be overridden via the "contextConfigLocation"
+ * <p>The config location defaults can be overridden via the "contextConfigLocation"   默认的配置文件位置可以通过 contextConfigLocation 来重写，
  * context-param of {@link org.springframework.web.context.ContextLoader} and servlet
  * init-param of {@link org.springframework.web.servlet.FrameworkServlet}. Config locations
  * can either denote concrete files like "/WEB-INF/context.xml" or Ant-style patterns
  * like "/WEB-INF/*-context.xml" (see {@link org.springframework.util.PathMatcher}
  * javadoc for pattern details).
  *
- * <p>Note: In case of multiple config locations, later bean definitions will
+ * <p>Note: In case of multiple config locations, later bean definitions will  多个配置位置的时候，后加载的会覆盖之前加载的。
  * override ones defined in earlier loaded files. This can be leveraged to
  * deliberately override certain bean definitions via an extra XML file.
  *
@@ -61,18 +61,18 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  */
 public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationContext {
 
-	/** Default config location for the root context. */
+	/** Default config location for the root context. */  // 默认的配置位置
 	public static final String DEFAULT_CONFIG_LOCATION = "/WEB-INF/applicationContext.xml";
 
-	/** Default prefix for building a config location for a namespace. */
+	/** Default prefix for building a config location for a namespace. */  //默认加载的namespace
 	public static final String DEFAULT_CONFIG_LOCATION_PREFIX = "/WEB-INF/";
 
-	/** Default suffix for building a config location for a namespace. */
+	/** Default suffix for building a config location for a namespace. */  // 默认的后缀
 	public static final String DEFAULT_CONFIG_LOCATION_SUFFIX = ".xml";
 
 
 	/**
-	 * Loads the bean definitions via an XmlBeanDefinitionReader.
+	 * Loads the bean definitions via an XmlBeanDefinitionReader.  通过 XmlBeanDefinitionReader 来加载
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 	 * @see #initBeanDefinitionReader
 	 * @see #loadBeanDefinitions
@@ -107,10 +107,10 @@ public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationC
 	}
 
 	/**
-	 * Load the bean definitions with the given XmlBeanDefinitionReader.
-	 * <p>The lifecycle of the bean factory is handled by the refreshBeanFactory method;
-	 * therefore this method is just supposed to load and/or register bean definitions.
-	 * <p>Delegates to a ResourcePatternResolver for resolving location patterns
+	 * Load the bean definitions with the given XmlBeanDefinitionReader.   通过给定的XmlBeanDefinitionReader加载bean定义。
+	 * <p>The lifecycle of the bean factory is handled by the refreshBeanFactory method;  bean工厂的生命周期是由refreshBeanFactory来处理的，
+	 * therefore this method is just supposed to load and/or register bean definitions.   因此认为这个方法去支持去加载或者注册bean定义。
+	 * <p>Delegates to a ResourcePatternResolver for resolving location patterns  委托给ResourcePatternResolver，用于将路径模式解析为Resource实例。
 	 * into Resource instances.
 	 * @throws IOException if the required XML document isn't found
 	 * @see #refreshBeanFactory

@@ -24,27 +24,27 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.lang.Nullable;
 
 /**
- * Central interface to provide configuration for an application.
- * This is read-only while the application is running, but may be
+ * Central interface to provide configuration for an application.    为应用提供配置信息的中央接口。
+ * This is read-only while the application is running, but may be    在应用运行时只读，但是如果实现支持重新加载可以被重新加载。
  * reloaded if the implementation supports this.
  *
- * <p>An ApplicationContext provides:
+ * <p>An ApplicationContext provides:    ApplicationContext提供：
  * <ul>
- * <li>Bean factory methods for accessing application components.
- * Inherited from {@link org.springframework.beans.factory.ListableBeanFactory}.
- * <li>The ability to load file resources in a generic fashion.
+ * <li>Bean factory methods for accessing application components.     bean工厂方法为了访问应用组件。
+ * Inherited from {@link org.springframework.beans.factory.ListableBeanFactory}. 继承自 ListableBeanFactory
+ * <li>The ability to load file resources in a generic fashion.      以通用的方式加载文件资源，继承自ResourceLoader接口
  * Inherited from the {@link org.springframework.core.io.ResourceLoader} interface.
- * <li>The ability to publish events to registered listeners.
+ * <li>The ability to publish events to registered listeners.   发布事件到注册的监听继承ApplicationEventPublisher接口。
  * Inherited from the {@link ApplicationEventPublisher} interface.
- * <li>The ability to resolve messages, supporting internationalization.
+ * <li>The ability to resolve messages, supporting internationalization.   解决消息，支持i18n国际化继承自MessageSource接口。
  * Inherited from the {@link MessageSource} interface.
- * <li>Inheritance from a parent context. Definitions in a descendant context
+ * <li>Inheritance from a parent context. Definitions in a descendant context   子ApplicationContext有更高的优先级。
  * will always take priority. This means, for example, that a single parent
  * context can be used by an entire web application, while each servlet has
  * its own child context that is independent of that of any other servlet.
  * </ul>
  *
- * <p>In addition to standard {@link org.springframework.beans.factory.BeanFactory}
+ * <p>In addition to standard {@link org.springframework.beans.factory.BeanFactory}    具备继承了接口的功能。
  * lifecycle capabilities, ApplicationContext implementations detect and invoke
  * {@link ApplicationContextAware} beans as well as {@link ResourceLoaderAware},
  * {@link ApplicationEventPublisherAware} and {@link MessageSourceAware} beans.
