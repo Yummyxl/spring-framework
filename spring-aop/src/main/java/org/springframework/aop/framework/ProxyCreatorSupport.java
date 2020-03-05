@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class ProxyCreatorSupport extends AdvisedSupport {
 
-	private AopProxyFactory aopProxyFactory;
+	private AopProxyFactory aopProxyFactory;  // 在构造方法中赋值
 
 	private final List<AdvisedSupportListener> listeners = new LinkedList<>();
 
@@ -71,7 +71,7 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 	/**
 	 * Return the AopProxyFactory that this ProxyConfig uses.
 	 */
-	public AopProxyFactory getAopProxyFactory() {
+	public AopProxyFactory  getAopProxyFactory() {
 		return this.aopProxyFactory;
 	}
 

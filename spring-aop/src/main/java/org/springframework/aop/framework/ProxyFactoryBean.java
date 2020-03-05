@@ -51,36 +51,36 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
 /**
- * {@link org.springframework.beans.factory.FactoryBean} implementation that builds an
- * AOP proxy based on beans in Spring {@link org.springframework.beans.factory.BeanFactory}.
+ * {@link org.springframework.beans.factory.FactoryBean} implementation that builds an     FactoryBean的实现，
+ * AOP proxy based on beans in Spring {@link org.springframework.beans.factory.BeanFactory}.    这个实现构建了一个类型为BeanFactory的bean的AOP代理。
  *
- * <p>{@link org.aopalliance.intercept.MethodInterceptor MethodInterceptors} and
+ * <p>{@link org.aopalliance.intercept.MethodInterceptor MethodInterceptors} and   MethodInterceptors（方法拦截）和Advisors（通知）在当前的bean工厂中被bean名字列表标示，
  * {@link org.springframework.aop.Advisor Advisors} are identified by a list of bean
- * names in the current bean factory, specified through the "interceptorNames" property.
- * The last entry in the list can be the name of a target bean or a
- * {@link org.springframework.aop.TargetSource}; however, it is normally preferable
+ * names in the current bean factory, specified through the "interceptorNames" property.   通过 interceptorNames 来指定。
+ * The last entry in the list can be the name of a target bean or a    在这个list的最后一个实体是target目标的名字，或者一个TargetSource。
+ * {@link org.springframework.aop.TargetSource}; however, it is normally preferable  但是，通常更建议用targetName"/"target"/"targetSource来代替。
  * to use the "targetName"/"target"/"targetSource" properties instead.
  *
- * <p>Global interceptors and advisors can be added at the factory level. The specified
- * ones are expanded in an interceptor list where an "xxx*" entry is included in the
- * list, matching the given prefix with the bean names (e.g. "global*" would match
- * both "globalBean1" and "globalBean2", "*" all defined interceptors). The matching
- * interceptors get applied according to their returned order value, if they implement
+ * <p>Global interceptors and advisors can be added at the factory level. The specified    全局的拦截起和通知可以在工厂级别添加。
+ * ones are expanded in an interceptor list where an "xxx*" entry is included in the    指定的拦截起在列表中展开，这个列表中包含 xxx* 条目，
+ * list, matching the given prefix with the bean names (e.g. "global*" would match       来匹配特定前缀的bean名字（例如global*匹配"globalBean1" and "globalBean2"），
+ * both "globalBean1" and "globalBean2", "*" all defined interceptors). The matching     * 定义所有。
+ * interceptors get applied according to their returned order value, if they implement   匹配的拦截起根据返回的顺序值来按顺序应用，如果实现了Ordered接口。
  * the {@link org.springframework.core.Ordered} interface.
  *
- * <p>Creates a JDK proxy when proxy interfaces are given, and a CGLIB proxy for the
- * actual target class if not. Note that the latter will only work if the target class
+ * <p>Creates a JDK proxy when proxy interfaces are given, and a CGLIB proxy for the      当提供了代理接口，用jdk代理，如果没有用 CJLIB代理。
+ * actual target class if not. Note that the latter will only work if the target class    声明下 后者只在没有final方法时候工作，在运行时返回一个生成的动态子类。
  * does not have final methods, as a dynamic subclass will be created at runtime.
  *
- * <p>It's possible to cast a proxy obtained from this factory to {@link Advised},
- * or to obtain the ProxyFactoryBean reference and programmatically manipulate it.
- * This won't work for existing prototype references, which are independent. However,
- * it will work for prototypes subsequently obtained from the factory. Changes to
- * interception will work immediately on singletons (including existing references).
- * However, to change interfaces or target it's necessary to obtain a new instance
- * from the factory. This means that singleton instances obtained from the factory
- * do not have the same object identity. However, they do have the same interceptors
- * and target, and changing any reference will change all objects.
+ * <p>It's possible to cast a proxy obtained from this factory to {@link Advised},        有可能把从这个工厂获取的代理转化为Advised，
+ * or to obtain the ProxyFactoryBean reference and programmatically manipulate it.     或者获取ProxyFactoryBean的引用并且编程方式的操纵。
+ * This won't work for existing prototype references, which are independent. However,   这对现有的原型引用不起作用，他们是独立的。
+ * it will work for prototypes subsequently obtained from the factory. Changes to  但是将用于随后从工厂获取到的原型。
+ * interception will work immediately on singletons (including existing references).  拦截的更改将立马会对单例上作用（包括已经存在的）。
+ * However, to change interfaces or target it's necessary to obtain a new instance   但是，更改接口或目标，有必要从工厂获取新的实例。
+ * from the factory. This means that singleton instances obtained from the factory   这以为着从工厂获取的单例并不是一样的对象标示。
+ * do not have the same object identity. However, they do have the same interceptors   但是，他们确实具有相同的拦截起和目标，
+ * and target, and changing any reference will change all objects.      并且更改任何引用都会更改任何对象，意思 interceptors 和 target是一样的。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -240,16 +240,16 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 
 
 	/**
-	 * Return a proxy. Invoked when clients obtain beans from this factory bean.
-	 * Create an instance of the AOP proxy to be returned by this factory.
-	 * The instance will be cached for a singleton, and create on each call to
+	 * Return a proxy. Invoked when clients obtain beans from this factory bean.  当客户端从工厂bean当中获取bean的时候调用。
+	 * Create an instance of the AOP proxy to be returned by this factory.     创建一个aop代理实例，这个代理实例被工厂返回。
+	 * The instance will be cached for a singleton, and create on each call to   代理会被缓存为单例，或者每次调用getObject都会创建。
 	 * {@code getObject()} for a proxy.
 	 * @return a fresh AOP proxy reflecting the current state of this factory
 	 */
 	@Override
 	@Nullable
 	public Object getObject() throws BeansException {
-		initializeAdvisorChain();
+		initializeAdvisorChain();  // 将注册的众多的advisor放在advisor集合中，advisor chin 构建出来了
 		if (isSingleton()) {
 			return getSingletonInstance();
 		}
@@ -334,7 +334,7 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 
 	/**
 	 * Create a new prototype instance of this class's created proxy object,
-	 * backed by an independent AdvisedSupport configuration.
+	 * backed by an independent AdvisedSupport configuration.   独立的AdvisedSupport配置来维护
 	 * @return a totally independent proxy, whose advice we may manipulate in isolation
 	 */
 	private synchronized Object newPrototypeInstance() {
@@ -366,7 +366,7 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 	}
 
 	/**
-	 * Return the proxy object to expose.
+	 * Return the proxy object to expose.   返回供暴露的代理对象
 	 * <p>The default implementation uses a {@code getProxy} call with
 	 * the factory's bean class loader. Can be overridden to specify a
 	 * custom class loader.
@@ -445,7 +445,7 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 				throw new AopConfigException("Target required after globals");
 			}
 
-			// Materialize interceptor chain from bean names.
+			// Materialize interceptor chain from bean names.  从bean的名字构成一个拦截器链
 			for (String name : this.interceptorNames) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Configuring advisor or advice '" + name + "'");
@@ -465,7 +465,7 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 					// We must check if it's a singleton or prototype.
 					Object advice;
 					if (this.singleton || this.beanFactory.isSingleton(name)) {
-						// Add the real Advisor/Advice to the chain.
+						// Add the real Advisor/Advice to the chain.    都是单例的，添加到调用链中一个真正的 Advisor/Advice
 						advice = this.beanFactory.getBean(name);
 					}
 					else {
