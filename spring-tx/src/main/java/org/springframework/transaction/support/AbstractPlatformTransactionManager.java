@@ -347,8 +347,8 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		Object transaction = doGetTransaction();
 		boolean debugEnabled = logger.isDebugEnabled();
 
-		if (isExistingTransaction(transaction)) {
-			// Existing transaction found -> check propagation behavior to find out how to behave.
+		if (isExistingTransaction(transaction)) { // 检查当前是否存在了事务
+			// Existing transaction found -> check propagation behavior to find out how to behave.  如果存在了事务
 			return handleExistingTransaction(def, transaction, debugEnabled);
 		}
 
@@ -400,7 +400,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			TransactionDefinition definition, Object transaction, boolean debugEnabled)
 			throws TransactionException {
 
-		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) {
+		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) { // 不支持当前事务
 			throw new IllegalTransactionStateException(
 					"Existing transaction found for transaction marked with propagation 'never'");
 		}
@@ -425,7 +425,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
 				DefaultTransactionStatus status = newTransactionStatus(
 						definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
-				doBegin(transaction, definition);
+				doBegin(transaction, definition);  //重新开启事务
 				prepareSynchronization(status, definition);
 				return status;
 			}
@@ -460,7 +460,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
 				DefaultTransactionStatus status = newTransactionStatus(
 						definition, transaction, true, newSynchronization, debugEnabled, null);
-				doBegin(transaction, definition);
+				doBegin(transaction, definition);  // 重新开启事务
 				prepareSynchronization(status, definition);
 				return status;
 			}
@@ -1043,15 +1043,15 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	protected abstract Object doGetTransaction() throws TransactionException;
 
 	/**
-	 * Check if the given transaction object indicates an existing transaction
+	 * Check if the given transaction object indicates an existing transaction   检查给定的事务对象暗示着一个存在的事务，换句话说就是一个事务已经开始了。
 	 * (that is, a transaction which has already started).
-	 * <p>The result will be evaluated according to the specified propagation
-	 * behavior for the new transaction. An existing transaction might get
+	 * <p>The result will be evaluated according to the specified propagation    根据不同指定的传播行为会对新的事务造成不同的结果。
+	 * behavior for the new transaction. An existing transaction might get       正在存在的事务可能会被挂起如果传播行为是 PROPAGATION_REQUIRES_NEW，
 	 * suspended (in case of PROPAGATION_REQUIRES_NEW), or the new transaction
-	 * might participate in the existing one (in case of PROPAGATION_REQUIRED).
-	 * <p>The default implementation returns {@code false}, assuming that
+	 * might participate in the existing one (in case of PROPAGATION_REQUIRED).    如果是 PROPAGATION_REQUIRED，新的事务可能加入已经存在的事务。
+	 * <p>The default implementation returns {@code false}, assuming that         默认的实现是返回false，指出加入到已经存在的事务通常是不被支持的。
 	 * participating in existing transactions is generally not supported.
-	 * Subclasses are of course encouraged to provide such support.
+	 * Subclasses are of course encouraged to provide such support.             子类当然鼓励去提供这种支持。
 	 * @param transaction transaction object returned by doGetTransaction
 	 * @return if there is an existing transaction
 	 * @throws TransactionException in case of system errors

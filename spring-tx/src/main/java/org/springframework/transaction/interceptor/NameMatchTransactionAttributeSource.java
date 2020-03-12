@@ -77,7 +77,7 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
 		while (propNames.hasMoreElements()) {
 			String methodName = (String) propNames.nextElement();
 			String value = transactionAttributes.getProperty(methodName);
-			tae.setAsText(value);
+			tae.setAsText(value);  // 设置事务的属性  value是在配置文件中写的
 			TransactionAttribute attr = (TransactionAttribute) tae.getValue();
 			addTransactionalMethod(methodName, attr);
 		}

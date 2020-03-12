@@ -107,10 +107,10 @@ public abstract class AopUtils {
 	public static Class<?> getTargetClass(Object candidate) {
 		Assert.notNull(candidate, "Candidate object must not be null");
 		Class<?> result = null;
-		if (candidate instanceof TargetClassAware) {
+		if (candidate instanceof TargetClassAware) { // jdk代理
 			result = ((TargetClassAware) candidate).getTargetClass();
 		}
-		if (result == null) {
+		if (result == null) {   // cjlib代理
 			result = (isCglibProxy(candidate) ? candidate.getClass().getSuperclass() : candidate.getClass());
 		}
 		return result;

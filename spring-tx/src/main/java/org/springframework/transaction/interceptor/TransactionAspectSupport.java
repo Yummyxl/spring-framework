@@ -242,10 +242,10 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @see TransactionAttributeEditor
 	 * @see NameMatchTransactionAttributeSource
 	 */
-	public void setTransactionAttributes(Properties transactionAttributes) {
+	public void setTransactionAttributes(Properties transactionAttributes) { // 设置事务属性
 		NameMatchTransactionAttributeSource tas = new NameMatchTransactionAttributeSource();
 		tas.setProperties(transactionAttributes);
-		this.transactionAttributeSource = tas;
+		this.transactionAttributeSource = tas; // transactionAttributeSource 是 transactionAttribute的包装
 	}
 
 	/**
@@ -329,8 +329,8 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
 			final InvocationCallback invocation) throws Throwable {
 
-		// If the transaction attribute is null, the method is non-transactional.
-		TransactionAttributeSource tas = getTransactionAttributeSource();
+		// If the transaction attribute is null, the method is non-transactional.  如果事务属性为空 方法就是一个非事务方法
+		TransactionAttributeSource tas = getTransactionAttributeSource();  // 完成方法和事务属性关系的建立，并放入map
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
 		final TransactionManager tm = determineTransactionManager(txAttr);
 
@@ -356,7 +356,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager)) {
-			// Standard transaction demarcation with getTransaction and commit/rollback calls.
+			// Standard transaction demarcation with getTransaction and commit/rollback calls.  标准的方式
 			TransactionInfo txInfo = createTransactionIfNecessary(ptm, txAttr, joinpointIdentification);
 
 			Object retVal;
@@ -556,7 +556,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	protected TransactionInfo createTransactionIfNecessary(@Nullable PlatformTransactionManager tm,
 			@Nullable TransactionAttribute txAttr, final String joinpointIdentification) {
 
-		// If no name specified, apply method identification as transaction name.
+		// If no name specified, apply method identification as transaction name.  如果没有指定名字会使用方法标示作为事务名字
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionAttribute(txAttr) {
 				@Override
